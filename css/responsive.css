@@ -1,0 +1,68 @@
+
+@media screen and (max-width: 549px) {
+  #map {
+    height: 200px;
+    width: 100%;
+    background-color: #ccc;
+  }
+  .inside {
+    height: 100%;
+    overflow-x: hidden; 
+  }
+  .inside td{
+    display: block;
+  }
+  .inside #restaurant-address {
+    font-size: 0.75em;
+  }
+  /* hide part of review in smaller screen to line height 1.2 or 3 lines*/
+.inside .comments{
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  }
+
+#reviews-list li {
+  padding: 0.5em;
+  }
+}
+@media screen and (min-width: 550px) {
+  .inside #maincontent {
+    display:flex;
+    flex-wrap: wrap;
+  }
+  .inside #restaurant-container {
+    flex: auto;
+    order: 0;
+  
+  }
+  .inside #map-container {
+    flex:auto;
+    order:1;
+   }
+    #restaurants-list{
+      display: flex;
+      justify-content: space-evenly;
+      flex-wrap: wrap;
+      padding:10px;
+}
+
+   #restaurants-list li
+   {
+     width: 32%;
+     margin-bottom: 2%;
+   }
+   .inside #reviews-container {
+    order: 2;
+  }   
+}
+@media screen and (min-width: 850px) {
+    body, header, nav, footer {
+      max-width: 1150px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .inside #restaurant-name, #restaurant-address, td, p {
+      font-size: 2em;
+    }
+  }
