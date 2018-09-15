@@ -13,6 +13,33 @@ var allCaches = [
     staticCacheName,
     contentImgsCache
 ];
+
+/**
+ * combine create and add
+ */
+function storeJSONLocal(){
+  fetch(DBHelper.DATABASE_URL)
+   .then(response => response.json())
+   .then(data =>{
+    //open indexDB database and add data in this then
+    idb.open('restaurant_info', 1, function(upgradeDB) {
+      var store = upgradeDB.createObjectStore('restaurants', {
+        keyPath: 'id'
+      });
+      //addJSON(store); // Fails here
+   //store.put({id: 1, name: "name"});
+ // for(i=0; i < data.length; i++){
+   data.forEach(function(item){
+    store.put(item);
+    //  store.put({id:data[i].id,name: data[i].name});
+      console.log(item); //test to see if this works
+    });
+  });
+  });
+
+}
+
+
 /**
  * add json from url
  */
@@ -49,6 +76,7 @@ function readDB() {
     return store.getAll();
   }).then(function(items) {
     // Use restaurant data
+    console.log(items);
       return items;
   });
 }
@@ -84,7 +112,8 @@ self.addEventListener('install', function(event) {
  */
 self.addEventListener('activate', function(event) {
   event.waitUntil(
-   createDB(),
+   //createDB(),
+   storeJSONLocal(),
     caches.keys().then(function(cacheNames) {
       return Promise.all(
         cacheNames.filter(function(cacheName) {
@@ -102,8 +131,8 @@ self.addEventListener('activate', function(event) {
 
 self.addEventListener('fetch', function (event) {
   if(event.request.url === DBHelper.DATABASE_URL){
-    console.log("IndexDB Fetch");
-    readDB();
+    console.log(event.request);
+    //readDB();
   }
   else{
       event.respondWith(caches.match(event.request).then(function (response) {
