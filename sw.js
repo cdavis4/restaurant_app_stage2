@@ -36,7 +36,6 @@ function storeJSONLocal(){
     });
   });
   });
-
 }
 
 
@@ -72,12 +71,11 @@ function createDB() {
 function readDB() {
   idb.open('restaurant_info', 1).then(function(db) {
     var tx = db.transaction(['restaurants'], 'readonly');
-    var store = tx.objectStore('restaurants');
+    var store = tx.objectStore('restaurants').index('id');
     return store.getAll();
   }).then(function(items) {
     // Use restaurant data
     console.log(items);
-      return items;
   });
 }
 
@@ -96,6 +94,7 @@ self.addEventListener('install', function(event) {
           '/js/restaurant_info.js',
           '/registerSW.js',
           '/sw.js',
+          '/js/idb.js',
           '/js/dbhelper.js',
           'https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
           'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js',
@@ -131,7 +130,16 @@ self.addEventListener('activate', function(event) {
 
 self.addEventListener('fetch', function (event) {
   if(event.request.url === DBHelper.DATABASE_URL){
-    console.log(event.request);
+    idb.open('restaurant_info', 1).then(function(db) {
+      var tx = db.transaction(['restaurants'], 'readonly');
+      var store = tx.objectStore('restaurants');
+      return store.getAll()
+      .then(items => {
+      // Use restaurant data
+        console.log(items);
+        return items;
+      })
+    })
     //readDB();
   }
   else{
